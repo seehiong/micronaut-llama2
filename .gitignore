@@ -1,0 +1,36 @@
+# Gradle
+.gradle/
+build/
+
+# IDE
+*.iml
+*.ipr
+*.iws
+*.bin
+*.iprof
+.idea/
+bin/
+target/
+out/
+.vscode
+.project
+.classpath
+.factorypath
+.micronaut/
+.settings/
+
+# Compiled files
+*.class
+*.jar
+*.war
+
+# Model files
+stories15M.bin
+tokenizer.bin
+
+# Logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db

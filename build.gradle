@@ -1,0 +1,89 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.4.2"
+    id("io.micronaut.aot") version "4.4.2"
+}
+
+version = "0.1"
+group = "example.micronaut"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor("org.projectlombok:lombok")
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    compileOnly("org.projectlombok:lombok")
+    compileOnly("io.micronaut:micronaut-http-client")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    testImplementation("io.micronaut:micronaut-http-client")
+}
+
+application {
+    mainClass = "example.micronaut.Application"
+    applicationDefaultJvmArgs = [ 
+        '--enable-preview',
+        '--add-modules', 'jdk.incubator.vector'
+    ]
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("23")
+    targetCompatibility = JavaVersion.toVersion("23")
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += [
+        '--enable-preview', 
+        '--add-modules', 'jdk.incubator.vector'
+    ]
+}
+
+tasks.withType(JavaExec) {
+    jvmArgs += [
+        '--enable-preview',
+        '--add-modules', 'jdk.incubator.vector'
+    ]
+}
+
+graalvmNative {
+    toolchainDetection = false // Disable toolchain detection if required
+    binaries {
+        main {
+            imageName = "application" 
+            mainClass = "example.micronaut.Application"
+            buildArgs.addAll([
+                '--enable-preview', 
+                '--add-modules=jdk.incubator.vector', 
+                '-march=x86-64',
+                '--initialize-at-build-time=example.micronaut.Application', 
+                '--enable-monitoring=heapdump,jfr',
+                '-H:+UnlockExperimentalVMOptions',
+                '-H:+ForeignAPISupport',
+                '-H:+ReportExceptionStackTraces', // Useful for debugging native image issues
+            ])
+        }
+    }
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("example.micronaut.*")
+    }
+    aot {
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
+        replaceLogbackXml = true
+    }
+}
