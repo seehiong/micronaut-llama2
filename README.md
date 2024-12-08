@@ -254,31 +254,29 @@ The original implementation was structured as follows:
 
 ```java
 public class Llama2 {
-    static class Config { ... }
-    static class Weights { ... }
-    static class RunState { ... }
-    static class Transformer { ... }
-    static class Tokenizer { ... }
-    static class Sampler { ... }
+   static class Config { ... }
+   static class Weights { ... }
+   static class RunState { ... }
+   static class Transformer { ... }
+   static class Tokenizer { ... }
+   static class Sampler { ... }
     
-    class Llama2 {
-      // Utility functions
-      static void rmsnorm(...) { ... }
-      static void softmax(...) { ... }
-      static void matmul(...) { ... }
-      static float[] forward(...) { ... }
-      static String decode(...) { ... }
-      static int encode(...) { ... }
-      static int sample(...) { ... }
-      ...
+   // Utility functions
+   static void rmsnorm(...) { ... }
+   static void softmax(...) { ... }
+   static void matmul(...) { ... }
+   static float[] forward(...) { ... }
+   static String decode(...) { ... }
+   static int encode(...) { ... }
+   static int sample(...) { ... }
+   ...
 
-      // Main generation logic
-      static String generate(...) { ... }
-      static String chat(...) { ... }
-      ...
-    }
+   // Main generation logic
+   static String generate(...) { ... }
+   static String chat(...) { ... }
+   ...
     
-    public static void main(String[] args) { ... }
+   public static void main(String[] args) { ... }
 }
 ```
 
