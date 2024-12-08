@@ -187,6 +187,7 @@ Transformer *-- RunState : contains
 
 @enduml
 ```
+![Control, Service and Model Package](control-service-model-package.png)
 
 ### Service and Utils Package
 
@@ -243,6 +244,7 @@ Llama2Service ..> TokenUtils : uses
 
 @enduml
 ```
+![Service and Utils Package](service-utils-package.png)
 
 ## Original Source
 
