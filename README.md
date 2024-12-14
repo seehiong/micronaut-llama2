@@ -86,16 +86,16 @@ package "Controller" {
     - String checkpoint_path
     - String tokenizer_path
     + void init()
-    + @Get("/generate") String generate(@QueryValue String prompt)
-    + @Get("/chat") String chat(@QueryValue String prompt, @QueryValue String system_prompt)
+    + @Get("/generate") Flux<String> generate(@QueryValue String prompt)
+    + @Get("/chat") Flux<Object> chat(@QueryValue String prompt, @QueryValue String system_prompt)
   }
 }
 
 package "Service" {
   class Llama2Service {
     + long time_in_ms()
-    + String generate(Transformer transformer, Tokenizer tokenizer, Sampler sampler, String prompt, int steps)
-    + String chat(Transformer transformer, Tokenizer tokenizer, Sampler sampler,\n            String cli_user_prompt, String cli_system_prompt, int steps)
+    + Flux<String> generate(Transformer transformer, Tokenizer tokenizer, Sampler sampler, String prompt, int steps)
+    + Flux<Object> chat(Transformer transformer, Tokenizer tokenizer, Sampler sampler,\n                  String cli_user_prompt, String cli_system_prompt, int steps)
   }
 }
 
@@ -187,7 +187,7 @@ Transformer *-- RunState : contains
 
 @enduml
 ```
-![Control, Service and Model Package](control-service-model-package.png)
+![Controller, Service and Model Package](controller-service-model-package.png)
 
 ### Service and Utils Package
 
@@ -198,8 +198,8 @@ skinparam classAttributeIconSize 0
 package "Service" {
   class Llama2Service {
     + long time_in_ms() // returns time in milliseconds for benchmarking
-    + String generate(Transformer transformer, Tokenizer tokenizer, Sampler sampler,\n            String prompt, int steps) // generates text completion
-    + String chat(Transformer transformer, Tokenizer tokenizer, Sampler sampler,\n            String user_prompt, String system_prompt, int steps) // handles chat interaction
+    + Flux<String> generate(Transformer transformer, Tokenizer tokenizer, Sampler sampler, String prompt, int steps) // generates text completion
+    + Flux<Object> chat(Transformer transformer, Tokenizer tokenizer, Sampler sampler, String user_prompt, String system_prompt, int steps) // handles chat interaction
   }
 
   note right of Llama2Service
