@@ -7,9 +7,11 @@ import example.micronaut.model.Tokenizer;
 import example.micronaut.model.Transformer;
 import example.micronaut.service.Llama2Service;
 import io.micronaut.context.annotation.Value;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 
 @Controller("/api/llama2")
 @RequiredArgsConstructor
@@ -61,13 +63,13 @@ public class Llama2Controller {
         sampler = new Sampler(transformer.config.vocab_size, temperature, topp, rng_seed);
     }
 
-    @Get("/generate")
-    public String generate(@QueryValue(defaultValue = "Once upon a time") String prompt) {
+    @Get(value = "/generate", produces = MediaType.TEXT_EVENT_STREAM)
+    public Flux<String> generate(@QueryValue(defaultValue = "Once upon a time") String prompt) {
         return llama2Service.generate(transformer, tokenizer, sampler, prompt, steps);
     }
 
-    @Get("/chat")
-    public String chat(@QueryValue(defaultValue = "Once upon a time") String prompt,
+    @Get(value = "/chat", produces = MediaType.TEXT_EVENT_STREAM)
+    public Flux<Object> chat(@QueryValue(defaultValue = "Once upon a time") String prompt,
             @QueryValue(defaultValue = "You are a helpful assistant.") String system_prompt) {
         return llama2Service.chat(transformer, tokenizer, sampler, prompt, system_prompt, steps);
     }
